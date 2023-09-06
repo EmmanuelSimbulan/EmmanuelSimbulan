@@ -1,5 +1,5 @@
 # 💫 About Me:
-👋 Hi, I’m @EmmanuelSimbulan. You can call me "Yman"<br> 🧠 I'm an ESFJ(Ego), INTP(Subcon), ISFP(Uncon), and ENTJ(Super Ego)<br> 👀 I’m interested in Data Science, Bioinformatics, Medical Informatics, Psychoinformatics, Software Engineering, and Web Development; especially in Quantum Computing<br> 🌱 I’m currently learning C, Java, Python, Website Development such as HTML, CSS, and JavaScript<br> 💞️ I’m looking to collaborate on ...<br> 
+👋 Hi, I’m @EmmanuelSimbulan. You can call me "Yman"<br> 🧠 I'm an ESFJ(Ego), INTP(Subcon), ISFP(Uncon), and ENTJ(Super Ego)<br> 👀 I’m interested in Data Science, Bioinformatics, Medical Informatics, Psychoinformatics, Software Engineering, and Web Development; especially in Quantum Computing<br> 🌱 I’m currently learning C, Java, Python, Website Development such as HTML, CSS, and JavaScript<br> 
 
 
 ## 🌐 Socials:

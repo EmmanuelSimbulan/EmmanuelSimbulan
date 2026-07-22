@@ -33,11 +33,15 @@ export function HeroSection() {
             <div className="relative">
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-1 shadow-2xl shadow-apple-blue/20">
                 <div className="w-full h-full rounded-full bg-surface-primary dark:bg-black flex items-center justify-center overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-apple-blue/10 to-apple-purple/10 flex items-center justify-center">
-                    <span className="text-5xl md:text-6xl font-bold text-apple-blue">
-                      E
-                    </span>
-                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/profile.jpg"
+                    alt="Emmanuel Simbulan"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/profile-placeholder.svg";
+                    }}
+                  />
                 </div>
               </div>
               <motion.div

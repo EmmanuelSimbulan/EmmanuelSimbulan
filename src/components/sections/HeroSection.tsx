@@ -10,7 +10,6 @@ const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export function HeroSection() {
   const [showNickname, setShowNickname] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
-  const [hideSubtitle, setHideSubtitle] = useState(false);
   const [tooltip, setTooltip] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true });
@@ -18,9 +17,8 @@ export function HeroSection() {
   useEffect(() => {
     if (!inView) return;
     const t1 = setTimeout(() => setShowNickname(true), 2800);
-    const t2 = setTimeout(() => setHideSubtitle(true), 4500);
-    const t3 = setTimeout(() => setShowDesc(true), 3500);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const t2 = setTimeout(() => setShowDesc(true), 3300);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [inView]);
 
   return (
@@ -29,7 +27,6 @@ export function HeroSection() {
       ref={ref}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background blobs */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-apple-blue/5 dark:bg-apple-blue/10 rounded-full blur-3xl animate-blob" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-apple-purple/5 dark:bg-apple-purple/10 rounded-full blur-3xl animate-blob-delay-2" />
@@ -65,7 +62,7 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* "Hi, I'm" */}
+        {/* "Hi, I'm" — stays visible throughout */}
         <motion.p
           className="text-base md:text-lg text-text-secondary mb-3"
           initial={{ opacity: 0, y: 15 }}
@@ -75,9 +72,9 @@ export function HeroSection() {
           Hi, I&apos;m
         </motion.p>
 
-        {/* Name — Emmanuel Simbulan fades out, Yman fades in */}
-        <div className="relative h-[110px] md:h-[140px] lg:h-[160px] flex items-center justify-center mb-4">
-          {/* Full name */}
+        {/* Name crossfade */}
+        <div className="relative h-[110px] md:h-[140px] lg:h-[160px] flex items-center justify-center mb-6">
+          {/* Emmanuel Simbulan */}
           <motion.h1
             className="absolute inset-0 flex flex-col items-center justify-center text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none"
             initial={{ opacity: 0, y: 30 }}
@@ -92,9 +89,9 @@ export function HeroSection() {
             <span className="text-text-primary dark:text-white">Simbulan</span>
           </motion.h1>
 
-          {/* Nickname */}
+          {/* You can call me Yman */}
           <motion.h1
-            className="absolute inset-0 flex items-center justify-center text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
+            className="absolute inset-0 flex flex-col items-center justify-center text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none"
             initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
             animate={{
               opacity: showNickname ? 1 : 0,
@@ -103,44 +100,34 @@ export function HeroSection() {
             }}
             transition={{ duration: 0.6, ease, delay: showNickname ? 0.15 : 0 }}
           >
-            <span className="text-gradient">Yman</span>
+            <span className="text-sm md:text-base lg:text-lg font-medium text-text-secondary mb-2 normal-case tracking-normal">
+              You can call me
+            </span>
+            <span className="text-gradient">
+              <span
+                className="relative cursor-default"
+                onMouseEnter={() => setTooltip(true)}
+                onMouseLeave={() => setTooltip(false)}
+              >
+                Yman
+                <AnimatePresence>
+                  {tooltip && (
+                    <motion.span
+                      className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-xs font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg shadow-lg z-50 pointer-events-none"
+                      initial={{ opacity: 0, y: 4, scale: 0.92 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 4, scale: 0.92 }}
+                      transition={{ duration: 0.15, ease }}
+                    >
+                      Nickname from friends &amp; colleagues 👋
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45" />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </span>
+            </span>
           </motion.h1>
         </div>
-
-        {/* Nickname subtitle — fades in then out */}
-        <motion.p
-          className="text-base md:text-lg text-text-secondary mb-6 h-7"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: showNickname && !hideSubtitle ? 1 : 0,
-            y: hideSubtitle ? -5 : 0,
-          }}
-          transition={{ duration: 0.4, ease }}
-          style={{ pointerEvents: hideSubtitle ? "none" : "auto" }}
-        >
-          You can also call me{" "}
-          <span
-            className="relative inline-block cursor-default"
-            onMouseEnter={() => setTooltip(true)}
-            onMouseLeave={() => setTooltip(false)}
-          >
-            <span className="text-gradient font-semibold">Yman</span>
-            <AnimatePresence>
-              {tooltip && (
-                <motion.span
-                  className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-xs font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg shadow-lg z-50 pointer-events-none"
-                  initial={{ opacity: 0, y: 4, scale: 0.92 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 4, scale: 0.92 }}
-                  transition={{ duration: 0.15, ease }}
-                >
-                  Nickname from friends &amp; colleagues 👋
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45" />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </span>
-        </motion.p>
 
         {/* Titles */}
         <motion.div

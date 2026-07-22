@@ -10,6 +10,7 @@ const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export function HeroSection() {
   const [showNickname, setShowNickname] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
+  const [hideSubtitle, setHideSubtitle] = useState(false);
   const [tooltip, setTooltip] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true });
@@ -17,8 +18,9 @@ export function HeroSection() {
   useEffect(() => {
     if (!inView) return;
     const t1 = setTimeout(() => setShowNickname(true), 2800);
-    const t2 = setTimeout(() => setShowDesc(true), 3500);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t2 = setTimeout(() => setHideSubtitle(true), 4500);
+    const t3 = setTimeout(() => setShowDesc(true), 3500);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [inView]);
 
   return (
@@ -105,12 +107,16 @@ export function HeroSection() {
           </motion.h1>
         </div>
 
-        {/* Nickname subtitle */}
+        {/* Nickname subtitle — fades in then out */}
         <motion.p
           className="text-base md:text-lg text-text-secondary mb-6 h-7"
           initial={{ opacity: 0 }}
-          animate={{ opacity: showNickname ? 1 : 0 }}
-          transition={{ delay: 0.5, duration: 0.5, ease }}
+          animate={{
+            opacity: showNickname && !hideSubtitle ? 1 : 0,
+            y: hideSubtitle ? -5 : 0,
+          }}
+          transition={{ duration: 0.4, ease }}
+          style={{ pointerEvents: hideSubtitle ? "none" : "auto" }}
         >
           You can also call me{" "}
           <span

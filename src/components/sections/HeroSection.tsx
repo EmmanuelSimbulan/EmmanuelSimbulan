@@ -35,11 +35,11 @@ export function HeroSection() {
                 <div className="w-full h-full rounded-full bg-surface-primary dark:bg-black flex items-center justify-center overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/profile.jpg"
+                    src={`${siteConfig.basePath}/images/profile.jpg`}
                     alt="Emmanuel Simbulan"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = "/images/profile-placeholder.svg";
+                      e.currentTarget.src = `${siteConfig.basePath}/images/profile-placeholder.svg`;
                     }}
                   />
                 </div>

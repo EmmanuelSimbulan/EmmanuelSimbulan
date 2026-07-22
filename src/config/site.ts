@@ -4,6 +4,7 @@ export const siteConfig = {
   description:
     "Personal portfolio of Emmanuel Simbulan. Business Analyst & Software Engineer building technology that connects business and people.",
   url: "https://emmanuelsimbulan.dev",
+  basePath: "/EmmanuelSimbulan",
   author: "Emmanuel Simbulan",
   email: "emmanuel.simbulan@email.com",
   github: "https://github.com/emmanuelsimbulan",

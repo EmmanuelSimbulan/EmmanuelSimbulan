@@ -16,7 +16,7 @@ export function HeroSection() {
     if (!inView) return;
     const timers = [
       setTimeout(() => setPhase(1), 600),
-      setTimeout(() => setPhase(2), 2400),
+      setTimeout(() => setPhase(2), 2600),
       setTimeout(() => setPhase(3), 3400),
     ];
     return () => timers.forEach(clearTimeout);
@@ -73,40 +73,30 @@ export function HeroSection() {
           Hi, I&apos;m
         </motion.p>
 
-        {/* Name */}
-        <div className="relative h-[100px] md:h-[130px] lg:h-[150px] flex items-center justify-center mb-8">
-          {/* Emmanuel Simbulan */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-500"
-            style={{
-              opacity: phase >= 2 ? 0 : 1,
-              transform: phase >= 2 ? "translateY(-12px)" : "translateY(0)",
-            }}
-          >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
-              <span className="text-gradient">Emmanuel</span>
-            </h1>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mt-1 text-text-primary dark:text-white">
-              Simbulan
-            </h1>
-          </div>
+        {/* Name — Emmanuel Simbulan */}
+        <h1
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-8 transition-opacity duration-500"
+          style={{ opacity: phase >= 2 ? 0 : 1 }}
+        >
+          <span className="text-gradient">Emmanuel</span>
+          <br />
+          <span className="text-text-primary dark:text-white">Simbulan</span>
+        </h1>
 
-          {/* You can call me Yman */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-500"
-            style={{
-              opacity: phase >= 2 ? 1 : 0,
-              transform: phase >= 2 ? "translateY(0)" : "translateY(12px)",
-            }}
-          >
-            <p className="text-sm md:text-base text-text-secondary mb-1">
-              You can call me
-            </p>
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-gradient">
-              Yman
-            </h1>
-          </div>
-        </div>
+        {/* Name — You can call me Yman */}
+        <h1
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-8 transition-opacity duration-500"
+          style={{
+            opacity: phase >= 2 ? 1 : 0,
+            position: phase >= 2 ? "relative" : "absolute",
+            pointerEvents: phase >= 2 ? "auto" : "none",
+          }}
+        >
+          <span className="text-sm md:text-base font-medium text-text-secondary block mb-1 normal-case tracking-normal">
+            You can call me
+          </span>
+          <span className="text-gradient">Yman</span>
+        </h1>
 
         {/* Titles */}
         <motion.div

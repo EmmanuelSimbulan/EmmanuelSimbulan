@@ -1,24 +1,25 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, Download } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function HeroSection() {
-  const [showNickname, setShowNickname] = useState(false);
-  const [showDesc, setShowDesc] = useState(false);
-  const [tooltip, setTooltip] = useState(false);
+  const [phase, setPhase] = useState(0);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (!inView) return;
-    const t1 = setTimeout(() => setShowNickname(true), 2800);
-    const t2 = setTimeout(() => setShowDesc(true), 3300);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const timers = [
+      setTimeout(() => setPhase(1), 600),
+      setTimeout(() => setPhase(2), 2400),
+      setTimeout(() => setPhase(3), 3400),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [inView]);
 
   return (
@@ -40,7 +41,7 @@ export function HeroSection() {
           className="mb-10"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2, ease }}
+          transition={{ duration: 0.8, delay: 0.1, ease }}
         >
           <div className="relative">
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20">
@@ -62,79 +63,57 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* "Hi, I'm" — stays visible throughout */}
+        {/* Greeting */}
         <motion.p
           className="text-base md:text-lg text-text-secondary mb-3"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5, ease }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: phase >= 1 ? 1 : 0 }}
+          transition={{ duration: 0.4, ease }}
         >
           Hi, I&apos;m
         </motion.p>
 
-        {/* Name crossfade */}
-        <div className="relative h-[110px] md:h-[140px] lg:h-[160px] flex items-center justify-center mb-6">
+        {/* Name */}
+        <div className="relative h-[100px] md:h-[130px] lg:h-[150px] flex items-center justify-center mb-8">
           {/* Emmanuel Simbulan */}
-          <motion.h1
-            className="absolute inset-0 flex flex-col items-center justify-center text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{
-              opacity: showNickname ? 0 : 1,
-              y: showNickname ? -20 : 0,
-              filter: showNickname ? "blur(8px)" : "blur(0px)",
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-500"
+            style={{
+              opacity: phase >= 2 ? 0 : 1,
+              transform: phase >= 2 ? "translateY(-12px)" : "translateY(0)",
             }}
-            transition={{ duration: 0.5, ease }}
           >
-            <span className="text-gradient">Emmanuel</span>
-            <span className="text-text-primary dark:text-white">Simbulan</span>
-          </motion.h1>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
+              <span className="text-gradient">Emmanuel</span>
+            </h1>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mt-1 text-text-primary dark:text-white">
+              Simbulan
+            </h1>
+          </div>
 
           {/* You can call me Yman */}
-          <motion.h1
-            className="absolute inset-0 flex flex-col items-center justify-center text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none"
-            initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-            animate={{
-              opacity: showNickname ? 1 : 0,
-              y: showNickname ? 0 : 30,
-              filter: showNickname ? "blur(0px)" : "blur(8px)",
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-500"
+            style={{
+              opacity: phase >= 2 ? 1 : 0,
+              transform: phase >= 2 ? "translateY(0)" : "translateY(12px)",
             }}
-            transition={{ duration: 0.6, ease, delay: showNickname ? 0.15 : 0 }}
           >
-            <span className="text-sm md:text-base lg:text-lg font-medium text-text-secondary mb-2 normal-case tracking-normal">
+            <p className="text-sm md:text-base text-text-secondary mb-1">
               You can call me
-            </span>
-            <span className="text-gradient">
-              <span
-                className="relative cursor-default"
-                onMouseEnter={() => setTooltip(true)}
-                onMouseLeave={() => setTooltip(false)}
-              >
-                Yman
-                <AnimatePresence>
-                  {tooltip && (
-                    <motion.span
-                      className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-xs font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg shadow-lg z-50 pointer-events-none"
-                      initial={{ opacity: 0, y: 4, scale: 0.92 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 4, scale: 0.92 }}
-                      transition={{ duration: 0.15, ease }}
-                    >
-                      Nickname from friends &amp; colleagues 👋
-                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45" />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </span>
-            </span>
-          </motion.h1>
+            </p>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-gradient">
+              Yman
+            </h1>
+          </div>
         </div>
 
         {/* Titles */}
         <motion.div
           className="flex flex-wrap justify-center gap-3 mb-8"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.5, ease }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: phase >= 1 ? 1 : 0, y: phase >= 1 ? 0 : 12 }}
+          transition={{ duration: 0.5, delay: 0.3, ease }}
         >
           <span className="px-4 py-2 bg-apple-blue/10 text-apple-blue rounded-full text-sm font-medium">
             Business Analyst
@@ -147,12 +126,9 @@ export function HeroSection() {
         {/* Description */}
         <motion.div
           className="max-w-xl mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{
-            opacity: showDesc ? 1 : 0,
-            y: showDesc ? 0 : 20,
-          }}
-          transition={{ duration: 0.6, ease }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: phase >= 3 ? 1 : 0, y: phase >= 3 ? 0 : 12 }}
+          transition={{ duration: 0.5, ease }}
         >
           <p className="text-lg md:text-xl text-text-secondary leading-relaxed">
             I&apos;m Emmanuel, a{" "}
@@ -182,12 +158,9 @@ export function HeroSection() {
         {/* CTAs */}
         <motion.div
           className="flex flex-col sm:flex-row items-center gap-4 mb-16"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{
-            opacity: showDesc ? 1 : 0,
-            y: showDesc ? 0 : 15,
-          }}
-          transition={{ delay: 0.2, duration: 0.5, ease }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: phase >= 3 ? 1 : 0, y: phase >= 3 ? 0 : 12 }}
+          transition={{ duration: 0.5, delay: 0.15, ease }}
         >
           <a
             href={siteConfig.resumeUrl}
@@ -229,8 +202,8 @@ export function HeroSection() {
         <motion.div
           className="flex flex-col items-center gap-2 animate-scroll-indicator"
           initial={{ opacity: 0 }}
-          animate={{ opacity: showDesc ? 1 : 0 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
+          animate={{ opacity: phase >= 3 ? 1 : 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
           <span className="text-xs text-text-tertiary uppercase tracking-widest">
             Scroll

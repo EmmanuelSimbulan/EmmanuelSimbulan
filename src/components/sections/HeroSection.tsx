@@ -113,15 +113,21 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
       </div>
 
-      {/* Centered vertical stack — constrained width */}
+      {/* Main content — visible overflow, wide container */}
       <div
-        className="w-full mx-auto flex flex-col items-center text-center"
-        style={{ maxWidth: "1100px", paddingInline: "clamp(24px, 4vw, 48px)" }}
+        className="relative w-full mx-auto flex flex-col items-center text-center"
+        style={{
+          maxWidth: "1200px",
+          paddingInline: "clamp(24px, 4vw, 48px)",
+          overflow: "visible",
+        }}
       >
+        {/* Top spacer — breathing room from nav */}
+        <div style={{ height: "clamp(20px, 3vw, 40px)" }} />
 
         {/* Profile */}
         <motion.div
-          style={{ marginBottom: "clamp(28px, 4vw, 40px)" }}
+          style={{ marginBottom: "clamp(24px, 3vw, 36px)" }}
           initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
           animate={{
             opacity: pageReady ? 1 : 0,
@@ -130,11 +136,8 @@ export function HeroSection() {
           }}
           transition={{ duration: 0.9, delay: 0.3, ease }}
         >
-          <div className="relative">
-            <div
-              className="rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20"
-              style={{ width: "clamp(88px, 10vw, 140px)", height: "clamp(88px, 10vw, 140px)" }}
-            >
+          <div className="relative mx-auto" style={{ width: "clamp(88px, 10vw, 140px)", height: "clamp(88px, 10vw, 140px)" }}>
+            <div className="w-full h-full rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20">
               <div className="w-full h-full rounded-full bg-surface-primary dark:bg-black overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -162,7 +165,7 @@ export function HeroSection() {
           style={{
             height: "1.3em",
             overflow: "visible",
-            marginBottom: "clamp(12px, 1.5vw, 20px)",
+            marginBottom: "clamp(10px, 1.5vw, 20px)",
           }}
         >
           <span
@@ -188,14 +191,20 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* ─── Name — clamp scales with viewport, never overflows ─── */}
+        {/* ─── Name — NO whitespace-nowrap, text-wrap: balance ─── */}
         <h1
-          className="mb-5 md:mb-7"
-          style={{ maxWidth: "900px" }}
+          className="mx-auto"
+          style={{
+            maxWidth: "900px",
+            marginBottom: "clamp(16px, 2vw, 28px)",
+          }}
         >
           <motion.span
-            className="text-gradient block whitespace-nowrap font-[800] tracking-tight leading-[1.05]"
-            style={{ fontSize: "clamp(2.2rem, 5.5vw, 4.5rem)" }}
+            className="text-gradient block font-[800] tracking-tight leading-[1.05]"
+            style={{
+              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+              textWrap: "balance",
+            }}
             initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
             animate={{
               opacity: pageReady ? 1 : 0,

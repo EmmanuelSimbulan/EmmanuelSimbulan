@@ -7,7 +7,7 @@ import { siteConfig } from "@/config/site";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-const greetings = ["Hi,", "Hola,", "Bonjour,", "안녕하세요,"];
+const greetings = ["Hi, I'm", "Hola, soy", "Bonjour, je suis", "안녕하세요, 저는"];
 
 const titles = ["Business Analyst", "Software Engineer", "Problem Solver"];
 
@@ -113,7 +113,8 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center">
+      {/* Wide container — enough room for full name on one line */}
+      <div className="w-full max-w-5xl mx-auto px-6 py-20 flex flex-col items-center text-center">
 
         {/* Profile */}
         <motion.div
@@ -146,40 +147,40 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* ─── Greeting + Name block ─── */}
-        <div className="mb-5 flex flex-col items-center">
-          {/* Greeting — sized to longest phrase, never clips */}
-          <div
-            className="relative flex items-center justify-center overflow-visible"
-            style={{ minHeight: "1.2em" }}
+        {/* ─── Greeting — sized to longest phrase ─── */}
+        <div
+          className="relative flex items-center justify-center mb-2"
+          style={{ height: "1.2em", overflow: "visible" }}
+        >
+          {/* Invisible sizer — sets width to longest greeting */}
+          <span
+            className="invisible whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+            aria-hidden="true"
           >
-            {/* Invisible sizer — reserves width for longest greeting */}
-            <span
-              className="invisible whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
-              aria-hidden="true"
+            Bonjour, je suis
+          </span>
+
+          {/* Animated greeting — positioned over sizer */}
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={greetingIndex}
+              className="absolute inset-0 flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary dark:text-white whitespace-nowrap"
+              initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -14, filter: "blur(4px)" }}
+              transition={{ duration: 0.45, ease }}
             >
-              안녕하세요,
-            </span>
+              {greetings[greetingIndex]}
+            </motion.span>
+          </AnimatePresence>
+        </div>
 
-            {/* Visible animated greeting — absolutely positioned over sizer */}
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={greetingIndex}
-                className="absolute inset-0 flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary dark:text-white whitespace-nowrap"
-                initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -16, filter: "blur(4px)" }}
-                transition={{ duration: 0.45, ease }}
-              >
-                {greetings[greetingIndex]}
-              </motion.span>
-            </AnimatePresence>
-          </div>
-
-          {/* Name — always together, never moves */}
-          <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mt-1"
-            style={{ textWrap: "balance" }}
+        {/* ─── Name — one line, never wraps, never moves ─── */}
+        <h1
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-5 whitespace-nowrap"
+        >
+          <motion.span
+            className="text-gradient"
             initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
             animate={{
               opacity: pageReady ? 1 : 0,
@@ -194,9 +195,9 @@ export function HeroSection() {
               damping: 15,
             }}
           >
-            <span className="text-gradient">Emmanuel Robledo Simbulan</span>
-          </motion.h1>
-        </div>
+            Emmanuel Robledo Simbulan
+          </motion.span>
+        </h1>
 
         {/* Nickname */}
         <motion.p
@@ -231,7 +232,7 @@ export function HeroSection() {
           </span>
         </motion.p>
 
-        {/* Rotating Title — fixed height, never shifts layout */}
+        {/* Rotating Title */}
         <div className="h-8 mb-8 flex items-center justify-center">
           {reducedMotion ? (
             <span className="text-lg md:text-xl font-semibold text-text-primary dark:text-white">

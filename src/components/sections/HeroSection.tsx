@@ -14,6 +14,7 @@ import {
   Lightbulb,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { ProfileImage } from "@/components/premium/ProfileImage";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -121,39 +122,9 @@ export function HeroSection() {
         <div className="shrink-0" style={{ height: "clamp(48px, 6vw, 72px)" }} />
 
         {/* ─── Profile Picture ─── */}
-        <motion.div
-          className="shrink-0"
-          style={{ marginBottom: "clamp(24px, 3vw, 36px)" }}
-          initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
-          animate={{
-            opacity: pageReady ? 1 : 0,
-            scale: pageReady ? 1 : 0.85,
-            filter: pageReady ? "blur(0px)" : "blur(12px)",
-          }}
-          transition={{ duration: 0.9, delay: 0.3, ease }}
-        >
-          <div className="relative mx-auto" style={{ width: "clamp(88px, 10vw, 140px)", height: "clamp(88px, 10vw, 140px)" }}>
-            <div className="w-full h-full rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20">
-              <div className="w-full h-full rounded-full bg-surface-primary dark:bg-black overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`${siteConfig.basePath}/images/profile.jpg`}
-                  alt="Emmanuel Robledo Simbulan"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = `${siteConfig.basePath}/images/profile-placeholder.svg`;
-                  }}
-                />
-              </div>
-            </div>
-            <div
-              className="absolute -bottom-0.5 -right-0.5 bg-apple-green rounded-full flex items-center justify-center shadow-md"
-              style={{ width: "clamp(20px, 2vw, 28px)", height: "clamp(20px, 2vw, 28px)" }}
-            >
-              <span className="text-white" style={{ fontSize: "clamp(9px, 1vw, 12px)" }}>✓</span>
-            </div>
-          </div>
-        </motion.div>
+        <div className="shrink-0" style={{ marginBottom: "clamp(24px, 3vw, 36px)" }}>
+          <ProfileImage delay={0.3} />
+        </div>
 
         {/* ─── Greeting ─── */}
         <div

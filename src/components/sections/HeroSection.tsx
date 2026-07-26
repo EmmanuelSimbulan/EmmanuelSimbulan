@@ -7,12 +7,7 @@ import { siteConfig } from "@/config/site";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-const greetings = [
-  { text: "Hi,", lang: "en" },
-  { text: "Hola,", lang: "es" },
-  { text: "Bonjour,", lang: "fr" },
-  { text: "안녕하세요,", lang: "ko" },
-];
+const greetings = ["Hi,", "Hola,", "Bonjour,", "안녕하세요,"];
 
 const titles = ["Business Analyst", "Software Engineer", "Problem Solver"];
 
@@ -53,14 +48,12 @@ export function HeroSection() {
   const inView = useInView(ref, { once: true });
   const reducedMotion = useReducedMotion();
 
-  // Page ready
   useEffect(() => {
     if (!inView) return;
     const t = setTimeout(() => setPageReady(true), 100);
     return () => clearTimeout(t);
   }, [inView]);
 
-  // Staggered reveals
   useEffect(() => {
     if (!pageReady || reducedMotion) {
       if (reducedMotion) {
@@ -78,7 +71,6 @@ export function HeroSection() {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [pageReady, reducedMotion]);
 
-  // Greeting rotation
   useEffect(() => {
     if (reducedMotion) return;
     const interval = setInterval(() => {
@@ -87,7 +79,6 @@ export function HeroSection() {
     return () => clearInterval(interval);
   }, [reducedMotion]);
 
-  // Title rotation
   useEffect(() => {
     if (!showDesc || reducedMotion) return;
     const interval = setInterval(() => {
@@ -95,13 +86,6 @@ export function HeroSection() {
     }, 3000);
     return () => clearInterval(interval);
   }, [showDesc, reducedMotion]);
-
-  const containerAnim = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.08 },
-    },
-  };
 
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
@@ -129,12 +113,8 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
       </div>
 
-      <motion.div
-        className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center"
-        variants={containerAnim}
-        initial="hidden"
-        animate={pageReady ? "visible" : "hidden"}
-      >
+      <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center">
+
         {/* Profile */}
         <motion.div
           className="mb-10"
@@ -166,32 +146,45 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Greeting + Name */}
-        <div className="mb-5">
-          {/* Greeting line — rotating */}
-          <div className="h-12 md:h-14 flex items-center justify-center overflow-hidden">
+        {/* ─── Greeting + Name block ─── */}
+        <div className="mb-5 flex flex-col items-center">
+          {/* Greeting — sized to longest phrase, never clips */}
+          <div
+            className="relative flex items-center justify-center overflow-visible"
+            style={{ minHeight: "1.2em" }}
+          >
+            {/* Invisible sizer — reserves width for longest greeting */}
+            <span
+              className="invisible whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+              aria-hidden="true"
+            >
+              안녕하세요,
+            </span>
+
+            {/* Visible animated greeting — absolutely positioned over sizer */}
             <AnimatePresence mode="wait">
               <motion.span
                 key={greetingIndex}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary dark:text-white inline-block mr-[0.25em]"
-                initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+                className="absolute inset-0 flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary dark:text-white whitespace-nowrap"
+                initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
-                transition={{ duration: 0.5, ease }}
+                exit={{ opacity: 0, y: -16, filter: "blur(4px)" }}
+                transition={{ duration: 0.45, ease }}
               >
-                {greetings[greetingIndex].text}
+                {greetings[greetingIndex]}
               </motion.span>
             </AnimatePresence>
           </div>
 
-          {/* Name — fixed, always visible */}
+          {/* Name — always together, never moves */}
           <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
-            initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mt-1"
+            style={{ textWrap: "balance" }}
+            initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
             animate={{
               opacity: pageReady ? 1 : 0,
-              y: pageReady ? 0 : 30,
-              filter: pageReady ? "blur(0px)" : "blur(10px)",
+              y: pageReady ? 0 : 24,
+              filter: pageReady ? "blur(0px)" : "blur(8px)",
             }}
             transition={{
               delay: 0.6,
@@ -208,13 +201,12 @@ export function HeroSection() {
         {/* Nickname */}
         <motion.p
           className="text-base md:text-lg text-text-secondary mb-10"
-          initial={{ opacity: 0, y: 15, scale: 0.97 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{
             opacity: showNickname ? 1 : 0,
-            y: showNickname ? 0 : 15,
-            scale: showNickname ? 1 : 0.97,
+            y: showNickname ? 0 : 12,
           }}
-          transition={{ duration: 0.6, ease }}
+          transition={{ duration: 0.5, ease }}
         >
           You can also call me{" "}
           <span
@@ -239,8 +231,8 @@ export function HeroSection() {
           </span>
         </motion.p>
 
-        {/* Rotating Title */}
-        <div className="h-8 mb-8 flex items-center justify-center overflow-hidden">
+        {/* Rotating Title — fixed height, never shifts layout */}
+        <div className="h-8 mb-8 flex items-center justify-center">
           {reducedMotion ? (
             <span className="text-lg md:text-xl font-semibold text-text-primary dark:text-white">
               {titles[0]}
@@ -250,10 +242,10 @@ export function HeroSection() {
               <motion.span
                 key={titleIndex}
                 className="text-lg md:text-xl font-semibold text-text-primary dark:text-white"
-                initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+                initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
-                transition={{ duration: 0.5, ease }}
+                exit={{ opacity: 0, y: -14, filter: "blur(4px)" }}
+                transition={{ duration: 0.45, ease }}
               >
                 {titles[titleIndex]}
               </motion.span>
@@ -264,9 +256,10 @@ export function HeroSection() {
         {/* Description */}
         <motion.p
           className="text-lg md:text-xl text-text-secondary leading-relaxed max-w-[650px] mb-12"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: showDesc ? 1 : 0, y: showDesc ? 0 : 15 }}
-          transition={{ duration: 0.6, ease }}
+          style={{ textWrap: "balance" }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: showDesc ? 1 : 0, y: showDesc ? 0 : 12 }}
+          transition={{ duration: 0.5, ease }}
         >
           I bridge business strategy and software engineering to design
           meaningful digital experiences and build solutions that make
@@ -276,13 +269,9 @@ export function HeroSection() {
         {/* Primary CTA */}
         <motion.div
           className="mb-6"
-          initial={{ opacity: 0, y: 15, scale: 0.95 }}
-          animate={{
-            opacity: showButtons ? 1 : 0,
-            y: showButtons ? 0 : 15,
-            scale: showButtons ? 1 : 0.95,
-          }}
-          transition={{ duration: 0.5, type: "spring", stiffness: 100, damping: 15 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: showButtons ? 1 : 0, y: showButtons ? 0 : 12 }}
+          transition={{ duration: 0.5, ease }}
         >
           <a
             href="#projects"
@@ -294,7 +283,7 @@ export function HeroSection() {
 
         {/* Social Links */}
         <motion.div
-          className="flex items-center gap-2 sm:gap-3 mb-16"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-16"
           initial="hidden"
           animate={showSocial ? "visible" : "hidden"}
           variants={{
@@ -320,7 +309,6 @@ export function HeroSection() {
                 <link.icon className="w-4 h-4" />
                 <span className="hidden sm:inline">{link.label}</span>
               </a>
-              {/* Tooltip */}
               <motion.span
                 className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 text-[11px] font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md shadow-lg z-50 pointer-events-none"
                 initial={false}
@@ -358,7 +346,7 @@ export function HeroSection() {
             </motion.div>
           )}
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

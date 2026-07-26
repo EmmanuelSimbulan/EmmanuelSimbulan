@@ -7,19 +7,20 @@ import { siteConfig } from "@/config/site";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+const titleWords = "Hi, I'm Emmanuel Robledo Simbulan.".split(" ");
+
 export function HeroSection() {
-  const [phase, setPhase] = useState(0);
+  const [showNickname, setShowNickname] = useState(false);
+  const [showDesc, setShowDesc] = useState(false);
+  const [tooltip, setTooltip] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (!inView) return;
-    const timers = [
-      setTimeout(() => setPhase(1), 600),
-      setTimeout(() => setPhase(2), 2600),
-      setTimeout(() => setPhase(3), 3400),
-    ];
-    return () => timers.forEach(clearTimeout);
+    const t1 = setTimeout(() => setShowNickname(true), 1400);
+    const t2 = setTimeout(() => setShowDesc(true), 2200);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [inView]);
 
   return (
@@ -39,8 +40,8 @@ export function HeroSection() {
         {/* Profile */}
         <motion.div
           className="mb-10"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 0.8, delay: 0.1, ease }}
         >
           <div className="relative">
@@ -49,7 +50,7 @@ export function HeroSection() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`${siteConfig.basePath}/images/profile.jpg`}
-                  alt="Emmanuel Simbulan"
+                  alt="Emmanuel Robledo Simbulan"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     e.currentTarget.src = `${siteConfig.basePath}/images/profile-placeholder.svg`;
@@ -63,94 +64,99 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Greeting */}
+        {/* Main Heading — word stagger, stays forever */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-4">
+          {titleWords.map((word, i) => (
+            <motion.span
+              key={i}
+              className={`inline-block mr-[0.3em] ${
+                word === "Emmanuel" || word === "Robledo" || word === "Simbulan."
+                  ? "text-gradient"
+                  : "text-text-primary dark:text-white"
+              }`}
+              initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                delay: 0.4 + i * 0.12,
+                duration: 0.6,
+                ease,
+              }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h1>
+
+        {/* Nickname */}
         <motion.p
-          className="text-base md:text-lg text-text-secondary mb-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: phase >= 1 ? 1 : 0 }}
-          transition={{ duration: 0.4, ease }}
+          className="text-base md:text-lg text-text-secondary mb-8"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: showNickname ? 1 : 0, y: showNickname ? 0 : 12 }}
+          transition={{ duration: 0.5, ease }}
         >
-          Hi, I&apos;m
+          You can also call me{" "}
+          <span
+            className="relative inline-block cursor-default"
+            onMouseEnter={() => setTooltip(true)}
+            onMouseLeave={() => setTooltip(false)}
+          >
+            <span className="text-gradient font-semibold">&ldquo;Yman&rdquo;</span>
+            <motion.span
+              className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-xs font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg shadow-lg z-50 pointer-events-none"
+              initial={false}
+              animate={{
+                opacity: tooltip ? 1 : 0,
+                y: tooltip ? 0 : 4,
+                scale: tooltip ? 1 : 0.92,
+              }}
+              transition={{ duration: 0.15, ease }}
+            >
+              Nickname from friends &amp; colleagues 👋
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45" />
+            </motion.span>
+          </span>
         </motion.p>
 
-        {/* Name — Emmanuel Simbulan */}
-        <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-8 transition-opacity duration-500"
-          style={{ opacity: phase >= 2 ? 0 : 1 }}
-        >
-          <span className="text-gradient">Emmanuel</span>
-          <br />
-          <span className="text-text-primary dark:text-white">Simbulan</span>
-        </h1>
-
-        {/* Name — You can call me Yman */}
-        <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-8 transition-opacity duration-500"
-          style={{
-            opacity: phase >= 2 ? 1 : 0,
-            position: phase >= 2 ? "relative" : "absolute",
-            pointerEvents: phase >= 2 ? "auto" : "none",
-          }}
-        >
-          <span className="text-sm md:text-base font-medium text-text-secondary block mb-1 normal-case tracking-normal">
-            You can call me
-          </span>
-          <span className="text-gradient">Yman</span>
-        </h1>
-
-        {/* Titles */}
+        {/* Tags */}
         <motion.div
           className="flex flex-wrap justify-center gap-3 mb-8"
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: phase >= 1 ? 1 : 0, y: phase >= 1 ? 0 : 12 }}
-          transition={{ duration: 0.5, delay: 0.3, ease }}
+          animate={{ opacity: showDesc ? 1 : 0, y: showDesc ? 0 : 12 }}
+          transition={{ duration: 0.5, ease }}
         >
           <span className="px-4 py-2 bg-apple-blue/10 text-apple-blue rounded-full text-sm font-medium">
             Business Analyst
           </span>
+          <span className="text-text-tertiary hidden sm:inline">•</span>
           <span className="px-4 py-2 bg-apple-purple/10 text-apple-purple rounded-full text-sm font-medium">
             Software Engineer
+          </span>
+          <span className="text-text-tertiary hidden sm:inline">•</span>
+          <span className="px-4 py-2 bg-apple-green/10 text-apple-green rounded-full text-sm font-medium">
+            Problem Solver
           </span>
         </motion.div>
 
         {/* Description */}
-        <motion.div
-          className="max-w-xl mb-10"
+        <motion.p
+          className="text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl mb-10"
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: phase >= 3 ? 1 : 0, y: phase >= 3 ? 0 : 12 }}
-          transition={{ duration: 0.5, ease }}
+          animate={{ opacity: showDesc ? 1 : 0, y: showDesc ? 0 : 12 }}
+          transition={{ duration: 0.5, delay: 0.1, ease }}
         >
-          <p className="text-lg md:text-xl text-text-secondary leading-relaxed">
-            I&apos;m Emmanuel, a{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 font-medium text-text-primary dark:text-white">
-                Business Analyst
-              </span>
-              <span className="absolute bottom-0.5 left-0 right-0 h-px bg-apple-blue/30" />
-            </span>{" "}
-            who fell in love with the art of{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 font-medium text-text-primary dark:text-white">
-                building software
-              </span>
-              <span className="absolute bottom-0.5 left-0 right-0 h-px bg-apple-purple/30" />
-            </span>
-            . My journey started with a simple question:{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 font-medium text-text-primary dark:text-white">
-                &quot;How can technology make this better?&quot;
-              </span>
-              <span className="absolute bottom-0.5 left-0 right-0 h-px bg-gradient-to-r from-apple-blue/30 to-apple-purple/30" />
-            </span>
-          </p>
-        </motion.div>
+          I enjoy bridging business strategy and software engineering to build
+          thoughtful, user-centered solutions. From analyzing complex business
+          requirements to designing and developing modern applications, I&apos;m
+          driven by curiosity, continuous learning, and creating technology that
+          makes a meaningful impact.
+        </motion.p>
 
         {/* CTAs */}
         <motion.div
           className="flex flex-col sm:flex-row items-center gap-4 mb-16"
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: phase >= 3 ? 1 : 0, y: phase >= 3 ? 0 : 12 }}
-          transition={{ duration: 0.5, delay: 0.15, ease }}
+          animate={{ opacity: showDesc ? 1 : 0, y: showDesc ? 0 : 12 }}
+          transition={{ duration: 0.5, delay: 0.2, ease }}
         >
           <a
             href={siteConfig.resumeUrl}
@@ -192,8 +198,8 @@ export function HeroSection() {
         <motion.div
           className="flex flex-col items-center gap-2 animate-scroll-indicator"
           initial={{ opacity: 0 }}
-          animate={{ opacity: phase >= 3 ? 1 : 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          animate={{ opacity: showDesc ? 1 : 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
         >
           <span className="text-xs text-text-tertiary uppercase tracking-widest">
             Scroll

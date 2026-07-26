@@ -182,13 +182,13 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* ─── Name — nowrap on desktop, clamp scales it ─── */}
+        {/* ─── Name — nowrap on desktop, wraps on mobile ─── */}
         <div className="shrink-0 w-full" style={{ maxWidth: "1000px", marginBottom: "clamp(16px, 2vw, 28px)" }}>
           <motion.h1
-            className="text-gradient font-[800] tracking-tight leading-[1.05] text-center"
+            className="text-gradient font-[800] tracking-tight leading-[1.05] text-center whitespace-normal lg:whitespace-nowrap"
             style={{
-              fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-              whiteSpace: "nowrap",
+              fontSize: "clamp(2.2rem, 5vw, 4.5rem)",
+              textWrap: "balance",
             }}
             initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
             animate={{

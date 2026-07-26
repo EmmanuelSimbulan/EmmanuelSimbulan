@@ -9,7 +9,7 @@ const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const greetings = ["Hi, I'm", "Hola, soy", "Bonjour, je suis", "안녕하세요, 저는"];
 
-const titles = ["Business Analyst", "Software Engineer", "Problem Solver"];
+const roles = ["Business Analyst", "Software Engineer", "Problem Solver"];
 
 const socialLinks = [
   { icon: Github, label: "GitHub", href: siteConfig.github },
@@ -37,8 +37,8 @@ function useReducedMotion() {
 
 export function HeroSection() {
   const [greetingIndex, setGreetingIndex] = useState(0);
-  const [titleIndex, setTitleIndex] = useState(0);
   const [showNickname, setShowNickname] = useState(false);
+  const [showBadges, setShowBadges] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
   const [showSocial, setShowSocial] = useState(false);
@@ -58,6 +58,7 @@ export function HeroSection() {
     if (!pageReady || reducedMotion) {
       if (reducedMotion) {
         setShowNickname(true);
+        setShowBadges(true);
         setShowDesc(true);
         setShowButtons(true);
         setShowSocial(true);
@@ -65,10 +66,11 @@ export function HeroSection() {
       return;
     }
     const t1 = setTimeout(() => setShowNickname(true), 1600);
-    const t2 = setTimeout(() => setShowDesc(true), 2400);
-    const t3 = setTimeout(() => setShowButtons(true), 3000);
-    const t4 = setTimeout(() => setShowSocial(true), 3400);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+    const t2 = setTimeout(() => setShowBadges(true), 2100);
+    const t3 = setTimeout(() => setShowDesc(true), 2700);
+    const t4 = setTimeout(() => setShowButtons(true), 3200);
+    const t5 = setTimeout(() => setShowSocial(true), 3500);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
   }, [pageReady, reducedMotion]);
 
   useEffect(() => {
@@ -78,14 +80,6 @@ export function HeroSection() {
     }, 2800);
     return () => clearInterval(interval);
   }, [reducedMotion]);
-
-  useEffect(() => {
-    if (!showDesc || reducedMotion) return;
-    const interval = setInterval(() => {
-      setTitleIndex((prev) => (prev + 1) % titles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [showDesc, reducedMotion]);
 
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
@@ -113,7 +107,6 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
       </div>
 
-      {/* Wide container — enough room for full name on one line */}
       <div className="w-full max-w-5xl mx-auto px-6 py-20 flex flex-col items-center text-center">
 
         {/* Profile */}
@@ -149,10 +142,9 @@ export function HeroSection() {
 
         {/* ─── Greeting — sized to longest phrase ─── */}
         <div
-          className="relative flex items-center justify-center mb-2"
+          className="relative flex items-center justify-center"
           style={{ height: "1.2em", overflow: "visible" }}
         >
-          {/* Invisible sizer — sets width to longest greeting */}
           <span
             className="invisible whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
             aria-hidden="true"
@@ -160,7 +152,6 @@ export function HeroSection() {
             Bonjour, je suis
           </span>
 
-          {/* Animated greeting — positioned over sizer */}
           <AnimatePresence mode="wait">
             <motion.span
               key={greetingIndex}
@@ -175,9 +166,9 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* ─── Name — one line, never wraps, never moves ─── */}
+        {/* ─── Name — one line, fixed, with gap below greeting ─── */}
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-5 whitespace-nowrap"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mt-4 mb-5 whitespace-nowrap"
         >
           <motion.span
             className="text-gradient"
@@ -201,7 +192,7 @@ export function HeroSection() {
 
         {/* Nickname */}
         <motion.p
-          className="text-base md:text-lg text-text-secondary mb-10"
+          className="text-base md:text-lg text-text-secondary mb-8"
           initial={{ opacity: 0, y: 12 }}
           animate={{
             opacity: showNickname ? 1 : 0,
@@ -232,27 +223,39 @@ export function HeroSection() {
           </span>
         </motion.p>
 
-        {/* Rotating Title */}
-        <div className="h-8 mb-8 flex items-center justify-center">
-          {reducedMotion ? (
-            <span className="text-lg md:text-xl font-semibold text-text-primary dark:text-white">
-              {titles[0]}
-            </span>
-          ) : (
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={titleIndex}
-                className="text-lg md:text-xl font-semibold text-text-primary dark:text-white"
-                initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -14, filter: "blur(4px)" }}
-                transition={{ duration: 0.45, ease }}
-              >
-                {titles[titleIndex]}
-              </motion.span>
-            </AnimatePresence>
-          )}
-        </div>
+        {/* ─── Professional Badges — static pills ─── */}
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-3 mb-10"
+          initial="hidden"
+          animate={showBadges ? "visible" : "hidden"}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+          }}
+        >
+          {roles.map((role) => (
+            <motion.span
+              key={role}
+              className="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-medium
+                bg-white/70 dark:bg-white/[0.06]
+                border border-black/[0.06] dark:border-white/[0.08]
+                shadow-[0_1px_2px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.2)]
+                backdrop-blur-md
+                text-text-primary dark:text-white/90
+                transition-all duration-[280ms] ease-out
+                hover:-translate-y-0.5 hover:scale-[1.02]
+                hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]
+                cursor-default"
+              variants={{
+                hidden: { opacity: 0, y: 14, filter: "blur(4px)" },
+                visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+              }}
+              transition={{ duration: 0.4, ease }}
+            >
+              {role}
+            </motion.span>
+          ))}
+        </motion.div>
 
         {/* Description */}
         <motion.p

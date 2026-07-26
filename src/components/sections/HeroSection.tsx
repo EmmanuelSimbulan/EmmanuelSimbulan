@@ -2,42 +2,111 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
 const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+const greetings = [
+  { text: "Hi,", lang: "en" },
+  { text: "Hola,", lang: "es" },
+  { text: "Bonjour,", lang: "fr" },
+  { text: "안녕하세요,", lang: "ko" },
+];
+
 const titles = ["Business Analyst", "Software Engineer", "Problem Solver"];
 
-const headingWords = ["Hi,", "I'm", "Emmanuel", "Robledo", "Simbulan."];
+const socialLinks = [
+  { icon: Github, label: "GitHub", href: siteConfig.github },
+  { icon: Linkedin, label: "LinkedIn", href: siteConfig.linkedin },
+  { icon: Mail, label: "Email", href: `mailto:${siteConfig.email}` },
+  {
+    icon: ExternalLink,
+    label: "Resume",
+    href: siteConfig.resumeUrl,
+    external: true,
+  },
+];
+
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return reduced;
+}
 
 export function HeroSection() {
+  const [greetingIndex, setGreetingIndex] = useState(0);
   const [titleIndex, setTitleIndex] = useState(0);
   const [showNickname, setShowNickname] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
-  const [tooltip, setTooltip] = useState(false);
+  const [showSocial, setShowSocial] = useState(false);
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
   const [pageReady, setPageReady] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true });
+  const reducedMotion = useReducedMotion();
 
+  // Page ready
   useEffect(() => {
     if (!inView) return;
-    const t0 = setTimeout(() => setPageReady(true), 200);
-    const t1 = setTimeout(() => setShowNickname(true), 1600);
-    const t2 = setTimeout(() => setShowDesc(true), 2600);
-    const t3 = setTimeout(() => setShowButtons(true), 3000);
-    return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const t = setTimeout(() => setPageReady(true), 100);
+    return () => clearTimeout(t);
   }, [inView]);
+
+  // Staggered reveals
+  useEffect(() => {
+    if (!pageReady || reducedMotion) {
+      if (reducedMotion) {
+        setShowNickname(true);
+        setShowDesc(true);
+        setShowButtons(true);
+        setShowSocial(true);
+      }
+      return;
+    }
+    const t1 = setTimeout(() => setShowNickname(true), 1600);
+    const t2 = setTimeout(() => setShowDesc(true), 2400);
+    const t3 = setTimeout(() => setShowButtons(true), 3000);
+    const t4 = setTimeout(() => setShowSocial(true), 3400);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+  }, [pageReady, reducedMotion]);
+
+  // Greeting rotation
+  useEffect(() => {
+    if (reducedMotion) return;
+    const interval = setInterval(() => {
+      setGreetingIndex((prev) => (prev + 1) % greetings.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, [reducedMotion]);
 
   // Title rotation
   useEffect(() => {
-    if (!showDesc) return;
+    if (!showDesc || reducedMotion) return;
     const interval = setInterval(() => {
       setTitleIndex((prev) => (prev + 1) % titles.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [showDesc]);
+  }, [showDesc, reducedMotion]);
+
+  const containerAnim = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
     <section
@@ -60,13 +129,21 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center">
-
+      <motion.div
+        className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center"
+        variants={containerAnim}
+        initial="hidden"
+        animate={pageReady ? "visible" : "hidden"}
+      >
         {/* Profile */}
         <motion.div
           className="mb-10"
           initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
-          animate={{ opacity: pageReady ? 1 : 0, scale: pageReady ? 1 : 0.85, filter: pageReady ? "blur(0px)" : "blur(12px)" }}
+          animate={{
+            opacity: pageReady ? 1 : 0,
+            scale: pageReady ? 1 : 0.85,
+            filter: pageReady ? "blur(0px)" : "blur(12px)",
+          }}
           transition={{ duration: 0.9, delay: 0.3, ease }}
         >
           <div className="relative">
@@ -89,34 +166,44 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Main Heading — word stagger, permanent */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-5">
-          {headingWords.map((word, i) => (
-            <motion.span
-              key={i}
-              className={`inline-block mr-[0.3em] ${
-                i >= 2
-                  ? "text-gradient"
-                  : "text-text-primary dark:text-white"
-              }`}
-              initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-              animate={{
-                opacity: pageReady ? 1 : 0,
-                y: pageReady ? 0 : 40,
-                filter: pageReady ? "blur(0px)" : "blur(10px)",
-              }}
-              transition={{
-                delay: 0.6 + i * 0.1,
-                duration: 0.7,
-                type: "spring",
-                stiffness: 80,
-                damping: 15,
-              }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+        {/* Greeting + Name */}
+        <div className="mb-5">
+          {/* Greeting line — rotating */}
+          <div className="h-12 md:h-14 flex items-center justify-center overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={greetingIndex}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary dark:text-white inline-block mr-[0.25em]"
+                initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+                transition={{ duration: 0.5, ease }}
+              >
+                {greetings[greetingIndex].text}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+
+          {/* Name — fixed, always visible */}
+          <motion.h1
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
+            initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+            animate={{
+              opacity: pageReady ? 1 : 0,
+              y: pageReady ? 0 : 30,
+              filter: pageReady ? "blur(0px)" : "blur(10px)",
+            }}
+            transition={{
+              delay: 0.6,
+              duration: 0.7,
+              type: "spring",
+              stiffness: 80,
+              damping: 15,
+            }}
+          >
+            <span className="text-gradient">Emmanuel Robledo Simbulan</span>
+          </motion.h1>
+        </div>
 
         {/* Nickname */}
         <motion.p
@@ -132,40 +219,46 @@ export function HeroSection() {
           You can also call me{" "}
           <span
             className="relative inline-block cursor-default"
-            onMouseEnter={() => setTooltip(true)}
-            onMouseLeave={() => setTooltip(false)}
+            onMouseEnter={() => setActiveTooltip("yman")}
+            onMouseLeave={() => setActiveTooltip(null)}
           >
             <span className="text-gradient font-semibold">&ldquo;Yman&rdquo;</span>
             <motion.span
               className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-xs font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg shadow-lg z-50 pointer-events-none"
               initial={false}
               animate={{
-                opacity: tooltip ? 1 : 0,
-                y: tooltip ? 0 : 4,
-                scale: tooltip ? 1 : 0.92,
+                opacity: activeTooltip === "yman" ? 1 : 0,
+                y: activeTooltip === "yman" ? 0 : 4,
+                scale: activeTooltip === "yman" ? 1 : 0.92,
               }}
               transition={{ duration: 0.15, ease }}
             >
-              Nickname from friends &amp; colleagues 👋
+              Nickname from friends &amp; colleagues
               <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-white rotate-45" />
             </motion.span>
           </span>
         </motion.p>
 
-        {/* Rotating Titles */}
+        {/* Rotating Title */}
         <div className="h-8 mb-8 flex items-center justify-center overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={titleIndex}
-              className="text-lg md:text-xl font-semibold text-text-primary dark:text-white"
-              initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
-              transition={{ duration: 0.5, ease }}
-            >
-              {titles[titleIndex]}
-            </motion.span>
-          </AnimatePresence>
+          {reducedMotion ? (
+            <span className="text-lg md:text-xl font-semibold text-text-primary dark:text-white">
+              {titles[0]}
+            </span>
+          ) : (
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={titleIndex}
+                className="text-lg md:text-xl font-semibold text-text-primary dark:text-white"
+                initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+                transition={{ duration: 0.5, ease }}
+              >
+                {titles[titleIndex]}
+              </motion.span>
+            </AnimatePresence>
+          )}
         </div>
 
         {/* Description */}
@@ -180,9 +273,9 @@ export function HeroSection() {
           technology simpler, smarter, and more human.
         </motion.p>
 
-        {/* Buttons */}
+        {/* Primary CTA */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center gap-4 mb-16"
+          className="mb-6"
           initial={{ opacity: 0, y: 15, scale: 0.95 }}
           animate={{
             opacity: showButtons ? 1 : 0,
@@ -193,36 +286,79 @@ export function HeroSection() {
         >
           <a
             href="#projects"
-            className="flex items-center gap-2 px-7 py-3.5 bg-apple-blue text-white rounded-xl font-medium text-sm transition-all duration-300 hover:bg-apple-blue-dark hover:shadow-lg hover:shadow-apple-blue/25 hover:scale-105"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-apple-blue text-white rounded-xl font-medium text-sm transition-all duration-300 hover:bg-apple-blue-dark hover:shadow-lg hover:shadow-apple-blue/25 hover:scale-105"
           >
             View Portfolio
           </a>
-          <a
-            href="#contact"
-            className="flex items-center gap-2 px-7 py-3.5 bg-surface-secondary hover:bg-surface-secondary/80 text-text-primary rounded-xl font-medium text-sm transition-all duration-300 hover:shadow-md hover:scale-105"
-          >
-            Contact Me
-          </a>
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          className="flex items-center gap-2 sm:gap-3 mb-16"
+          initial="hidden"
+          animate={showSocial ? "visible" : "hidden"}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
+          }}
+        >
+          {socialLinks.map((link) => (
+            <motion.div
+              key={link.label}
+              className="relative"
+              variants={fadeUp}
+              transition={{ duration: 0.4, ease }}
+              onMouseEnter={() => setActiveTooltip(link.label)}
+              onMouseLeave={() => setActiveTooltip(null)}
+            >
+              <a
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                className="flex items-center gap-2 px-4 py-2.5 bg-surface-secondary hover:bg-surface-secondary/80 text-text-secondary hover:text-text-primary rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md"
+              >
+                <link.icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{link.label}</span>
+              </a>
+              {/* Tooltip */}
+              <motion.span
+                className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 text-[11px] font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md shadow-lg z-50 pointer-events-none"
+                initial={false}
+                animate={{
+                  opacity: activeTooltip === link.label ? 1 : 0,
+                  y: activeTooltip === link.label ? 0 : 4,
+                  scale: activeTooltip === link.label ? 1 : 0.92,
+                }}
+                transition={{ duration: 0.15, ease }}
+              >
+                {link.label}
+              </motion.span>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Scroll Indicator */}
         <motion.div
           className="flex flex-col items-center gap-2"
           initial={{ opacity: 0 }}
-          animate={{ opacity: showButtons ? 0.6 : 0 }}
+          animate={{ opacity: showSocial ? 0.6 : 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <span className="text-xs text-text-tertiary uppercase tracking-widest">
             Scroll to Explore
           </span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
+          {reducedMotion ? (
             <ArrowDown className="w-4 h-4 text-text-tertiary" />
-          </motion.div>
+          ) : (
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ArrowDown className="w-4 h-4 text-text-tertiary" />
+            </motion.div>
+          )}
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -96,7 +96,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="relative h-screen max-h-[1100px] min-h-[620px] flex items-center justify-center overflow-hidden"
+      className="relative h-screen max-h-[1100px] min-h-[600px] flex items-center justify-center overflow-hidden"
     >
       {/* Page load fade */}
       <motion.div
@@ -113,12 +113,15 @@ export function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
       </div>
 
-      {/* Constrained content container */}
-      <div className="w-full max-w-[1100px] mx-auto px-8 md:px-12 flex flex-col items-center text-center">
+      {/* Centered vertical stack — constrained width */}
+      <div
+        className="w-full mx-auto flex flex-col items-center text-center"
+        style={{ maxWidth: "1100px", paddingInline: "clamp(24px, 4vw, 48px)" }}
+      >
 
-        {/* Profile — 120–140px desktop */}
+        {/* Profile */}
         <motion.div
-          className="mb-8 md:mb-[32px]"
+          style={{ marginBottom: "clamp(28px, 4vw, 40px)" }}
           initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
           animate={{
             opacity: pageReady ? 1 : 0,
@@ -128,7 +131,10 @@ export function HeroSection() {
           transition={{ duration: 0.9, delay: 0.3, ease }}
         >
           <div className="relative">
-            <div className="w-[88px] h-[88px] sm:w-[100px] sm:h-[100px] md:w-[120px] md:h-[120px] lg:w-[140px] lg:h-[140px] rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20">
+            <div
+              className="rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20"
+              style={{ width: "clamp(88px, 10vw, 140px)", height: "clamp(88px, 10vw, 140px)" }}
+            >
               <div className="w-full h-full rounded-full bg-surface-primary dark:bg-black overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -141,20 +147,28 @@ export function HeroSection() {
                 />
               </div>
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 sm:w-6 sm:h-6 md:w-[26px] md:h-[26px] lg:w-7 lg:h-7 bg-apple-green rounded-full flex items-center justify-center shadow-md">
-              <span className="text-white text-[9px] sm:text-[10px] md:text-xs">✓</span>
+            <div
+              className="absolute -bottom-0.5 -right-0.5 bg-apple-green rounded-full flex items-center justify-center shadow-md"
+              style={{ width: "clamp(20px, 2vw, 28px)", height: "clamp(20px, 2vw, 28px)" }}
+            >
+              <span className="text-white" style={{ fontSize: "clamp(9px, 1vw, 12px)" }}>✓</span>
             </div>
           </div>
         </motion.div>
 
-        {/* ─── Greeting — small, muted ─── */}
+        {/* ─── Greeting ─── */}
         <div
-          className="relative flex items-center justify-center mb-3 md:mb-5"
-          style={{ height: "1.3em", overflow: "visible" }}
+          className="relative flex items-center justify-center"
+          style={{
+            height: "1.3em",
+            overflow: "visible",
+            marginBottom: "clamp(12px, 1.5vw, 20px)",
+          }}
         >
           <span
-            className="invisible whitespace-nowrap text-[18px] sm:text-[20px] md:text-[24px] lg:text-[26px] font-medium tracking-wide"
+            className="invisible whitespace-nowrap font-medium tracking-wide"
             aria-hidden="true"
+            style={{ fontSize: "clamp(18px, 2vw, 26px)" }}
           >
             Bonjour, je suis
           </span>
@@ -162,7 +176,8 @@ export function HeroSection() {
           <AnimatePresence mode="wait">
             <motion.span
               key={greetingIndex}
-              className="absolute inset-0 flex items-center justify-center text-[18px] sm:text-[20px] md:text-[24px] lg:text-[26px] font-medium tracking-wide text-text-tertiary dark:text-white/45 whitespace-nowrap"
+              className="absolute inset-0 flex items-center justify-center whitespace-nowrap font-medium tracking-wide text-text-tertiary dark:text-white/45"
+              style={{ fontSize: "clamp(18px, 2vw, 26px)" }}
               initial={{ opacity: 0, y: 10, filter: "blur(3px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: -10, filter: "blur(3px)" }}
@@ -173,10 +188,14 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* ─── Name — 64–72px desktop ─── */}
-        <h1 className="mb-5 md:mb-7 max-w-[900px]">
+        {/* ─── Name — clamp scales with viewport, never overflows ─── */}
+        <h1
+          className="mb-5 md:mb-7"
+          style={{ maxWidth: "900px" }}
+        >
           <motion.span
-            className="text-gradient text-[36px] sm:text-[42px] md:text-[54px] lg:text-[66px] xl:text-[72px] font-[800] tracking-tight leading-[1.05] whitespace-nowrap block"
+            className="text-gradient block whitespace-nowrap font-[800] tracking-tight leading-[1.05]"
+            style={{ fontSize: "clamp(2.2rem, 5.5vw, 4.5rem)" }}
             initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
             animate={{
               opacity: pageReady ? 1 : 0,
@@ -197,7 +216,11 @@ export function HeroSection() {
 
         {/* ─── Nickname ─── */}
         <motion.p
-          className="text-[13px] sm:text-sm md:text-[15px] lg:text-base text-text-secondary mb-5 md:mb-8"
+          className="text-text-secondary"
+          style={{
+            fontSize: "clamp(0.8rem, 1.2vw, 1.05rem)",
+            marginBottom: "clamp(20px, 2.5vw, 32px)",
+          }}
           initial={{ opacity: 0, y: 10 }}
           animate={{
             opacity: showNickname ? 1 : 0,
@@ -230,7 +253,8 @@ export function HeroSection() {
 
         {/* ─── Badges ─── */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 md:mb-12"
+          className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3"
+          style={{ marginBottom: "clamp(28px, 4vw, 48px)" }}
           initial="hidden"
           animate={showBadges ? "visible" : "hidden"}
           variants={{
@@ -241,7 +265,7 @@ export function HeroSection() {
           {roles.map((role) => (
             <motion.span
               key={role.label}
-              className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-full text-xs sm:text-sm font-medium
+              className="inline-flex items-center gap-2 rounded-full font-medium
                 bg-white/70 dark:bg-white/[0.06]
                 border border-black/[0.06] dark:border-white/[0.08]
                 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
@@ -251,6 +275,10 @@ export function HeroSection() {
                 hover:-translate-y-[3px] hover:scale-[1.03]
                 hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3)]
                 cursor-default"
+              style={{
+                fontSize: "clamp(0.75rem, 1vw, 0.9rem)",
+                padding: "clamp(8px, 1vw, 12px) clamp(14px, 1.5vw, 24px)",
+              }}
               variants={{
                 hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
                 visible: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -265,7 +293,8 @@ export function HeroSection() {
 
         {/* ─── Divider ─── */}
         <motion.div
-          className="w-10 h-px bg-black/10 dark:bg-white/10 mb-6 md:mb-8"
+          className="w-10 h-px bg-black/10 dark:bg-white/10"
+          style={{ marginBottom: "clamp(20px, 2.5vw, 32px)" }}
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: showCTA ? 1 : 0, scaleX: showCTA ? 1 : 0 }}
           transition={{ duration: 0.5, ease }}
@@ -273,19 +302,22 @@ export function HeroSection() {
 
         {/* ─── CTA ─── */}
         <motion.div
-          className="mb-6 md:mb-8"
+          style={{ marginBottom: "clamp(20px, 2.5vw, 32px)" }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: showCTA ? 1 : 0, y: showCTA ? 0 : 10 }}
           transition={{ duration: 0.5, ease }}
         >
           <a
             href="#projects"
-            className="group inline-flex items-center gap-2.5 px-7 py-3.5 md:px-8 md:py-4 rounded-full font-medium text-sm text-white
+            className="group inline-flex items-center gap-2.5 rounded-full font-medium text-sm text-white
               bg-gradient-to-r from-apple-blue to-apple-blue-dark
               shadow-[0_2px_12px_rgba(0,122,255,0.25)] dark:shadow-[0_2px_16px_rgba(0,122,255,0.3)]
               transition-all duration-300 ease-out
               hover:-translate-y-0.5 hover:scale-[1.02]
               hover:shadow-[0_6px_24px_rgba(0,122,255,0.35)] dark:hover:shadow-[0_6px_24px_rgba(0,122,255,0.4)]"
+            style={{
+              padding: "clamp(12px, 1.5vw, 16px) clamp(24px, 3vw, 36px)",
+            }}
           >
             View Portfolio
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -294,7 +326,8 @@ export function HeroSection() {
 
         {/* ─── Divider ─── */}
         <motion.div
-          className="w-10 h-px bg-black/10 dark:bg-white/10 mb-6 md:mb-8"
+          className="w-10 h-px bg-black/10 dark:bg-white/10"
+          style={{ marginBottom: "clamp(20px, 2.5vw, 32px)" }}
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: showSocial ? 1 : 0, scaleX: showSocial ? 1 : 0 }}
           transition={{ duration: 0.5, ease }}
@@ -302,7 +335,8 @@ export function HeroSection() {
 
         {/* ─── Social Links ─── */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 md:mb-12"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+          style={{ marginBottom: "clamp(28px, 4vw, 48px)" }}
           initial="hidden"
           animate={showSocial ? "visible" : "hidden"}
           variants={{
@@ -326,7 +360,7 @@ export function HeroSection() {
                 href={link.href}
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium
+                className="inline-flex items-center gap-2 rounded-full font-medium
                   bg-white/60 dark:bg-white/[0.05]
                   border border-black/[0.06] dark:border-white/[0.07]
                   shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)]
@@ -336,6 +370,10 @@ export function HeroSection() {
                   hover:-translate-y-[2px] hover:scale-[1.03]
                   hover:border-black/[0.12] dark:hover:border-white/[0.14]
                   hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+                style={{
+                  fontSize: "clamp(0.75rem, 1vw, 0.9rem)",
+                  padding: "clamp(8px, 1vw, 10px) clamp(14px, 1.5vw, 20px)",
+                }}
               >
                 <link.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {link.label}

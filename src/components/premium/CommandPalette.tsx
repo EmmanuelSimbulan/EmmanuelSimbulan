@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, Command } from "lucide-react";
+import { appleEase } from "@/utils/animations";
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,7 @@ export function CommandPalette() {
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 glass-strong rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
         aria-label="Open command palette"
       >
-        <Command className="w-4 h-4 text-text-secondary group-hover:text-apple-blue transition-colors" />
+        <Command className="w-4 h-4 text-text-secondary group-hover:text-accent transition-colors" />
         <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors hidden sm:inline">
           Command
         </span>
@@ -75,7 +76,7 @@ export function CommandPalette() {
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.2, ease: appleEase }}
             >
               <div className="glass-strong rounded-2xl shadow-2xl overflow-hidden">
                 <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
@@ -103,7 +104,7 @@ export function CommandPalette() {
                       className="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-secondary transition-colors text-left group"
                     >
                       <span className="text-lg">{item.icon}</span>
-                      <span className="text-sm font-medium text-text-primary group-hover:text-apple-blue transition-colors">
+                      <span className="text-sm font-medium text-text-primary group-hover:text-accent transition-colors">
                         {item.label}
                       </span>
                       <span className="ml-auto text-xs text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity">

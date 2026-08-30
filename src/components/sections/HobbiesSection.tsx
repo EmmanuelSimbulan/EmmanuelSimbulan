@@ -27,7 +27,7 @@ export function HobbiesSection() {
           {hobbies.map((hobby) => (
             <motion.div
               key={hobby.name}
-              className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 transition-all duration-300 group"
+              className="flex flex-col items-center gap-3 p-6 rounded-3xl glass hover:border-accent/35 transition-all duration-300 group"
               variants={staggerItem}
               whileHover={{ y: -4, scale: 1.02 }}
             >
@@ -61,7 +61,7 @@ export function HobbiesSection() {
           {favorites.map((fav) => (
             <motion.div
               key={fav.category}
-              className="p-5 rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 transition-all duration-300 group"
+              className="p-5 rounded-3xl glass hover:border-accent/35 transition-all duration-300 group"
               variants={staggerItem}
               whileHover={{ y: -4 }}
             >
@@ -71,7 +71,7 @@ export function HobbiesSection() {
                   {fav.category}
                 </span>
               </div>
-              <h4 className="text-base font-semibold text-text-primary group-hover:text-apple-blue transition-colors">
+              <h4 className="text-base font-semibold text-text-primary group-hover:text-accent transition-colors">
                 {fav.value}
               </h4>
               {fav.description && (

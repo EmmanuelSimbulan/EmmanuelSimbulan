@@ -42,7 +42,7 @@ export default function BlogPage() {
             ].map((post, index) => (
               <motion.article
                 key={post.title}
-                className="p-8 rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 transition-all duration-300 cursor-pointer group"
+                className="p-8 rounded-3xl glass hover:border-accent/35 transition-all duration-300 cursor-pointer group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
@@ -51,7 +51,7 @@ export default function BlogPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs text-text-tertiary">{post.date}</span>
                 </div>
-                <h2 className="text-xl font-bold text-text-primary mb-2 group-hover:text-apple-blue transition-colors">
+                <h2 className="text-xl font-bold text-text-primary mb-2 group-hover:text-accent transition-colors">
                   {post.title}
                 </h2>
                 <p className="text-sm text-text-secondary mb-4">

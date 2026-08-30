@@ -23,12 +23,12 @@ export function ProjectsSection() {
         {projects.map((project) => (
           <motion.div
             key={project.id}
-            className="group rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 overflow-hidden transition-all duration-500"
+            className="group rounded-3xl glass hover:border-accent/35 overflow-hidden transition-all duration-500"
             variants={staggerItem}
             whileHover={{ y: -4 }}
           >
             {/* Image */}
-            <div className="relative h-48 bg-gradient-to-br from-apple-blue/10 to-apple-purple/10 flex items-center justify-center">
+            <div className="relative h-48 bg-gradient-to-br from-accent/10 to-accent-light/10 flex items-center justify-center">
               <span className="text-6xl opacity-20">
                 {project.featured ? "🚀" : "📦"}
               </span>
@@ -36,7 +36,7 @@ export function ProjectsSection() {
             </div>
 
             <div className="p-6 md:p-8">
-              <h3 className="text-lg font-bold text-text-primary mb-2 group-hover:text-apple-blue transition-colors">
+              <h3 className="text-lg font-bold text-text-primary mb-2 group-hover:text-accent transition-colors">
                 {project.title}
               </h3>
               <p className="text-sm text-text-secondary leading-relaxed mb-4 line-clamp-3">
@@ -57,7 +57,7 @@ export function ProjectsSection() {
 
               {/* Business impact */}
               {project.impact && (
-                <p className="text-xs text-apple-green font-medium mb-4">
+                <p className="text-xs text-success font-medium mb-4">
                   {project.impact}
                 </p>
               )}
@@ -69,7 +69,7 @@ export function ProjectsSection() {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs font-medium text-text-secondary hover:text-apple-blue transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-medium text-text-secondary hover:text-accent transition-colors"
                   >
                     <Github className="w-3.5 h-3.5" />
                     Code
@@ -80,7 +80,7 @@ export function ProjectsSection() {
                     href={project.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs font-medium text-text-secondary hover:text-apple-blue transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-medium text-text-secondary hover:text-accent transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     Live Demo

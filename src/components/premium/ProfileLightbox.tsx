@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { appleEase, springSmooth } from "@/utils/animations";
 
 interface ProfileLightboxProps {
   isOpen: boolean;
@@ -48,7 +49,7 @@ export function ProfileLightbox({ isOpen, onClose, imageSrc, alt }: ProfileLight
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.35, ease: appleEase }}
           onClick={onClose}
           onKeyDown={(e) => { if (e.key === "Escape") onClose(); }}
           onTouchStart={handleTouchStart}
@@ -63,7 +64,7 @@ export function ProfileLightbox({ isOpen, onClose, imageSrc, alt }: ProfileLight
             initial={{ scale: 0.3, opacity: 0, borderRadius: "50%" }}
             animate={{ scale: 1, opacity: 1, borderRadius: "20px" }}
             exit={{ scale: 0.3, opacity: 0, borderRadius: "50%" }}
-            transition={{ type: "spring", stiffness: 180, damping: 24, mass: 0.8 }}
+            transition={springSmooth}
           >
             <img
               src={imageSrc}

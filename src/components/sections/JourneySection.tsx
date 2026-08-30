@@ -31,7 +31,7 @@ export function JourneySection() {
               {/* Dot */}
               <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-10">
                 <motion.div
-                  className="w-8 h-8 rounded-full bg-surface-primary dark:bg-black border-2 border-apple-blue flex items-center justify-center shadow-lg shadow-apple-blue/10"
+                  className="w-8 h-8 rounded-full bg-surface-primary border-2 border-accent flex items-center justify-center shadow-lg shadow-accent/10"
                   whileInView={{ scale: [0.8, 1.1, 1] }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.2 }}
@@ -47,10 +47,10 @@ export function JourneySection() {
                 }`}
               >
                 <motion.div
-                  className="p-6 rounded-2xl bg-surface-secondary/50 border border-border hover:border-apple-blue/20 transition-colors duration-300"
+                  className="p-6 rounded-2xl glass hover:border-accent/35 transition-colors duration-300"
                   whileHover={{ y: -2 }}
                 >
-                  <span className="text-xs font-medium text-apple-blue uppercase tracking-wider">
+                  <span className="text-xs font-medium text-accent uppercase tracking-wider">
                     {entry.year}
                   </span>
                   <h3 className="text-lg font-semibold mt-2 mb-2 text-text-primary">

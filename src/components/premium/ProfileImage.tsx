@@ -4,8 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/config/site";
 import { ProfileLightbox } from "./ProfileLightbox";
-
-const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+import { appleEase as ease } from "@/utils/animations";
 
 interface ProfileImageProps {
   delay?: number;
@@ -51,8 +50,8 @@ export function ProfileImage({ delay = 0.3 }: ProfileImageProps) {
           }
         }}
       >
-        <div className="w-full h-full rounded-full bg-gradient-to-br from-apple-blue to-apple-purple p-[3px] shadow-2xl shadow-apple-blue/20 transition-shadow duration-300 group-hover:shadow-apple-blue/40">
-          <div className="w-full h-full rounded-full bg-surface-primary dark:bg-black overflow-hidden">
+        <div className="w-full h-full rounded-full bg-gradient-to-br from-accent to-accent-light p-[3px] shadow-2xl shadow-accent/20 transition-shadow duration-300 group-hover:shadow-accent/40">
+          <div className="w-full h-full rounded-full bg-surface-primary overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageSrc}
@@ -67,7 +66,7 @@ export function ProfileImage({ delay = 0.3 }: ProfileImageProps) {
 
         {/* Online badge */}
         <div
-          className="absolute -bottom-0.5 -right-0.5 bg-apple-green rounded-full flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-110"
+          className="absolute -bottom-0.5 -right-0.5 bg-success rounded-full flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-110"
           style={{ width: "clamp(20px, 2vw, 28px)", height: "clamp(20px, 2vw, 28px)" }}
         >
           <span className="text-white" style={{ fontSize: "clamp(9px, 1vw, 12px)" }}>✓</span>

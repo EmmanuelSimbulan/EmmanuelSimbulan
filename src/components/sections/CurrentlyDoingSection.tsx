@@ -20,7 +20,7 @@ export function CurrentlyDoingSection() {
       >
         {/* Work */}
         <motion.div
-          className="p-6 rounded-3xl bg-surface-secondary/30 border border-border"
+          className="p-6 rounded-3xl glass"
           variants={fadeInUp}
         >
           <div className="flex items-center gap-2 mb-4">
@@ -39,7 +39,7 @@ export function CurrentlyDoingSection() {
                 key={i}
                 className="flex items-start gap-2 text-sm text-text-secondary"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-blue mt-1.5 flex-shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
                 {item}
               </li>
             ))}
@@ -48,7 +48,7 @@ export function CurrentlyDoingSection() {
 
         {/* Learning */}
         <motion.div
-          className="p-6 rounded-3xl bg-surface-secondary/30 border border-border"
+          className="p-6 rounded-3xl glass"
           variants={fadeInUp}
         >
           <div className="flex items-center gap-2 mb-4">
@@ -68,7 +68,7 @@ export function CurrentlyDoingSection() {
                 key={i}
                 className="flex items-start gap-2 text-sm text-text-secondary"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-green mt-1.5 flex-shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 flex-shrink-0" />
                 {item}
               </li>
             ))}
@@ -77,7 +77,7 @@ export function CurrentlyDoingSection() {
 
         {/* Goals */}
         <motion.div
-          className="p-6 rounded-3xl bg-surface-secondary/30 border border-border"
+          className="p-6 rounded-3xl glass"
           variants={fadeInUp}
         >
           <div className="flex items-center gap-2 mb-4">
@@ -97,7 +97,7 @@ export function CurrentlyDoingSection() {
                 key={i}
                 className="flex items-start gap-2 text-sm text-text-secondary"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-purple mt-1.5 flex-shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-leaf mt-1.5 flex-shrink-0" />
                 {item}
               </li>
             ))}
@@ -106,7 +106,7 @@ export function CurrentlyDoingSection() {
 
         {/* Reading */}
         <motion.div
-          className="p-6 rounded-3xl bg-surface-secondary/30 border border-border"
+          className="p-6 rounded-3xl glass"
           variants={fadeInUp}
         >
           <div className="flex items-center gap-2 mb-4">
@@ -125,7 +125,7 @@ export function CurrentlyDoingSection() {
                 key={i}
                 className="flex items-start gap-2 text-sm text-text-secondary"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-apple-orange mt-1.5 flex-shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-light mt-1.5 flex-shrink-0" />
                 {item}
               </li>
             ))}
@@ -134,7 +134,7 @@ export function CurrentlyDoingSection() {
 
         {/* Gym */}
         <motion.div
-          className="p-6 rounded-3xl bg-surface-secondary/30 border border-border"
+          className="p-6 rounded-3xl glass"
           variants={fadeInUp}
         >
           <div className="flex items-center gap-2 mb-4">
@@ -152,7 +152,7 @@ export function CurrentlyDoingSection() {
 
         {/* Life Update */}
         <motion.div
-          className="p-6 rounded-3xl bg-surface-secondary/30 border border-border"
+          className="p-6 rounded-3xl glass"
           variants={fadeInUp}
         >
           <div className="flex items-center gap-2 mb-4">

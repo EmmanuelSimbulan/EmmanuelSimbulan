@@ -55,12 +55,12 @@ export function BlogSection() {
         {blogPosts.map((post) => (
           <motion.article
             key={post.slug}
-            className="group p-6 md:p-8 rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 transition-all duration-500 cursor-pointer"
+            className="group p-6 md:p-8 rounded-3xl glass hover:border-accent/35 transition-all duration-500 cursor-pointer"
             variants={staggerItem}
             whileHover={{ y: -4 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-apple-blue/10 text-apple-blue rounded-full">
+              <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-accent/10 text-accent rounded-full">
                 {post.category}
               </span>
               <span className="text-[11px] text-text-tertiary flex items-center gap-1">
@@ -69,7 +69,7 @@ export function BlogSection() {
               </span>
             </div>
 
-            <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-apple-blue transition-colors line-clamp-2">
+            <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-accent transition-colors line-clamp-2">
               {post.title}
             </h3>
 
@@ -88,7 +88,7 @@ export function BlogSection() {
               ))}
             </div>
 
-            <div className="flex items-center gap-1 text-xs font-medium text-apple-blue group-hover:gap-2 transition-all">
+            <div className="flex items-center gap-1 text-xs font-medium text-accent group-hover:gap-2 transition-all">
               Read more
               <ArrowRight className="w-3 h-3" />
             </div>

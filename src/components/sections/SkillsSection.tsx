@@ -22,7 +22,7 @@ export function SkillsSection() {
         {skillCategories.map((category) => (
           <motion.div
             key={category.name}
-            className="p-6 rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 transition-all duration-500 group"
+            className="p-6 rounded-3xl glass hover:border-accent/35 transition-all duration-500 group"
             variants={staggerItem}
             whileHover={{ y: -4 }}
           >
@@ -46,7 +46,7 @@ export function SkillsSection() {
                   </div>
                   <div className="h-1.5 bg-surface-secondary rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-apple-blue rounded-full"
+                      className="h-full bg-accent rounded-full"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.level}%` }}
                       viewport={{ once: true }}

@@ -23,19 +23,19 @@ export function ExperienceSection() {
         {experiences.map((exp) => (
           <motion.div
             key={exp.id}
-            className="p-8 md:p-10 rounded-3xl bg-surface-secondary/30 border border-border hover:border-apple-blue/20 transition-all duration-500 group"
+            className="p-8 md:p-10 rounded-3xl glass hover:border-accent/35 transition-all duration-500 group"
             variants={staggerItem}
             whileHover={{ y: -2 }}
           >
             <div className="flex flex-col md:flex-row md:items-start gap-6 mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-apple-blue/10 flex items-center justify-center flex-shrink-0 group-hover:bg-apple-blue/20 transition-colors">
-                <Briefcase className="w-5 h-5 text-apple-blue" />
+              <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
+                <Briefcase className="w-5 h-5 text-accent" />
               </div>
               <div>
                 <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-1">
                   {exp.title}
                 </h3>
-                <p className="text-sm text-apple-blue font-medium">
+                <p className="text-sm text-accent font-medium">
                   {exp.company} • {exp.period}
                 </p>
                 <p className="text-base text-text-secondary mt-3 leading-relaxed">
@@ -56,7 +56,7 @@ export function ExperienceSection() {
                       key={index}
                       className="flex items-start gap-2 text-sm text-text-secondary"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-apple-blue mt-1.5 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -74,7 +74,7 @@ export function ExperienceSection() {
                       key={index}
                       className="flex items-start gap-2 text-sm text-text-secondary"
                     >
-                      <CheckCircle className="w-4 h-4 text-apple-green mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
                       {item}
                     </li>
                   ))}

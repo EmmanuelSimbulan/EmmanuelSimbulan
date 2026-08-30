@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { LoadingScreen } from "@/components/premium/LoadingScreen";
 import { ScrollProgress } from "@/components/premium/ScrollProgress";
 import { CommandPalette } from "@/components/premium/CommandPalette";
+import { CinematicIntro } from "@/components/intro/CinematicIntro";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { JourneySection } from "@/components/sections/JourneySection";
@@ -17,9 +18,10 @@ import { BlogSection } from "@/components/sections/BlogSection";
 import { HobbiesSection } from "@/components/sections/HobbiesSection";
 import { CurrentlyDoingSection } from "@/components/sections/CurrentlyDoingSection";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { GrassDivider } from "@/components/premium/GrassDivider";
 
 export default function Home() {
-  useLenis();
+  const lenis = useLenis();
 
   return (
     <main>
@@ -28,6 +30,7 @@ export default function Home() {
       <Navbar />
       <CommandPalette />
 
+      <CinematicIntro lenis={lenis} />
       <HeroSection />
       <AboutSection />
       <JourneySection />
@@ -40,6 +43,7 @@ export default function Home() {
       <CurrentlyDoingSection />
       <ContactSection />
 
+      <GrassDivider />
       <Footer />
     </main>
   );

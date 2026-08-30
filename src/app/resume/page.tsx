@@ -21,14 +21,14 @@ export default function ResumePage() {
             <a
               href="/resume.pdf"
               download
-              className="px-6 py-3 bg-apple-blue text-white rounded-xl font-medium text-sm hover:bg-apple-blue-dark transition-all duration-300 hover:shadow-lg hover:shadow-apple-blue/25"
+              className="aero-gloss px-6 py-3 bg-accent text-white rounded-xl font-medium text-sm hover:bg-accent-dark transition-all duration-300 hover:shadow-lg hover:shadow-accent/25"
             >
-              Download PDF
+              <span className="relative z-10">Download PDF</span>
             </a>
           </div>
 
           {/* Resume Content */}
-          <div className="p-8 md:p-12 rounded-3xl bg-surface-secondary/30 border border-border">
+          <div className="p-8 md:p-12 rounded-3xl glass">
             <div className="space-y-12">
               {/* Header */}
               <div className="text-center border-b border-border pb-8">
@@ -37,13 +37,13 @@ export default function ResumePage() {
                   Business Analyst • Software Engineer
                 </p>
                 <p className="text-sm text-text-tertiary mt-2">
-                  emmanuel.simbulan@email.com • Philippines
+                  emmanuelrsimbulan@gmail.com • Philippines
                 </p>
               </div>
 
               {/* Summary */}
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-apple-blue mb-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-accent mb-4">
                   Professional Summary
                 </h3>
                 <p className="text-sm text-text-secondary leading-relaxed">
@@ -57,7 +57,7 @@ export default function ResumePage() {
 
               {/* Experience */}
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-apple-blue mb-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-accent mb-4">
                   Experience
                 </h3>
                 <div className="space-y-6">
@@ -70,7 +70,7 @@ export default function ResumePage() {
                         Present
                       </span>
                     </div>
-                    <p className="text-sm text-apple-blue mb-2">
+                    <p className="text-sm text-accent mb-2">
                       Current Role
                     </p>
                     <ul className="space-y-1.5">
@@ -93,7 +93,7 @@ export default function ResumePage() {
 
               {/* Skills */}
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-apple-blue mb-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-accent mb-4">
                   Technical Skills
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -128,7 +128,7 @@ export default function ResumePage() {
 
               {/* Education */}
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-apple-blue mb-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-accent mb-4">
                   Education
                 </h3>
                 <div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowDown,
   ArrowRight,
@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { ProfileImage } from "@/components/premium/ProfileImage";
-
-const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+import { Skyline } from "@/components/premium/Skyline";
+import { appleEase as ease } from "@/utils/animations";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useMouseParallax } from "@/hooks/useMouseParallax";
 
 const greetings = ["Hi, I'm", "Hola, soy", "Bonjour, je suis", "안녕하세요, 저는"];
 
@@ -38,18 +40,6 @@ const socialLinks = [
   },
 ];
 
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-  return reduced;
-}
-
 export function HeroSection() {
   const [greetingIndex, setGreetingIndex] = useState(0);
   const [showNickname, setShowNickname] = useState(false);
@@ -58,15 +48,16 @@ export function HeroSection() {
   const [showSocial, setShowSocial] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
   const [pageReady, setPageReady] = useState(false);
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true });
   const reducedMotion = useReducedMotion();
+  const parallaxRef = useMouseParallax<HTMLDivElement>();
 
+  // Fires shortly after mount, independent of scroll position — Hero now sits
+  // below the cinematic intro, so it isn't in the viewport at initial load and
+  // a scroll-into-view trigger here would leave the fade overlay stuck open.
   useEffect(() => {
-    if (!inView) return;
     const t = setTimeout(() => setPageReady(true), 100);
     return () => clearTimeout(t);
-  }, [inView]);
+  }, []);
 
   useEffect(() => {
     if (!pageReady || reducedMotion) {
@@ -96,23 +87,42 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      ref={ref}
       className="relative min-h-[600px] flex items-center justify-center overflow-hidden"
       style={{ height: "100dvh", maxHeight: "1100px" }}
     >
       {/* Page load fade */}
       <motion.div
-        className="fixed inset-0 z-[200] bg-white dark:bg-black pointer-events-none"
+        className="fixed inset-0 z-[200] bg-surface-primary pointer-events-none"
         initial={{ opacity: 1 }}
         animate={{ opacity: pageReady ? 0 : 1 }}
         transition={{ duration: 0.8, ease }}
       />
 
-      {/* Background blobs */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-apple-blue/5 dark:bg-apple-blue/10 rounded-full blur-3xl animate-blob" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-apple-purple/5 dark:bg-apple-purple/10 rounded-full blur-3xl animate-blob-delay-2" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-apple-teal/3 dark:bg-apple-teal/5 rounded-full blur-3xl animate-blob-delay-4" />
+      {/* Background blobs — drift with the cursor, on top of their own float animation */}
+      <div ref={parallaxRef} className="absolute inset-0 -z-10">
+        <div
+          className="absolute top-1/4 left-1/4 w-96 h-96"
+          style={reducedMotion ? undefined : { transform: "translate(calc(var(--mx, 0) * 26px), calc(var(--my, 0) * 26px))", transition: "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)" }}
+        >
+          <div className="w-full h-full bg-accent/10 dark:bg-accent/15 rounded-full blur-3xl animate-blob-float" />
+        </div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-96 h-96"
+          style={reducedMotion ? undefined : { transform: "translate(calc(var(--mx, 0) * -34px), calc(var(--my, 0) * -34px))", transition: "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)" }}
+        >
+          <div className="w-full h-full bg-accent-light/10 dark:bg-accent-light/15 rounded-full blur-3xl animate-blob-float-delay-2" />
+        </div>
+        <div
+          className="absolute top-1/2 left-1/2 w-[500px] h-[500px]"
+          style={
+            reducedMotion
+              ? { transform: "translate(-50%, -50%)" }
+              : { transform: "translate(calc(-50% + var(--mx, 0) * 18px), calc(-50% + var(--my, 0) * 18px))", transition: "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)" }
+          }
+        >
+          <div className="w-full h-full bg-leaf/5 dark:bg-leaf/8 rounded-full blur-3xl animate-blob-float-delay-4" />
+        </div>
+        <Skyline />
       </div>
 
       {/* ─── Hero content — vertical flex stack, centered ─── */}
@@ -224,7 +234,7 @@ export function HeroSection() {
           {roles.map((role) => (
             <motion.span
               key={role.label}
-              className="inline-flex items-center gap-2 rounded-full font-medium bg-white/70 dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] backdrop-blur-md text-text-primary dark:text-white/90 transition-all duration-[250ms] ease-out hover:-translate-y-[3px] hover:scale-[1.03] hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3)] cursor-default"
+              className="glass inline-flex items-center gap-2 rounded-full font-medium text-text-primary transition-all duration-[250ms] ease-out hover:-translate-y-[3px] hover:scale-[1.03] cursor-default"
               style={{ fontSize: "clamp(0.75rem, 1vw, 0.9rem)", padding: "clamp(8px, 1vw, 12px) clamp(14px, 1.5vw, 24px)" }}
               variants={{
                 hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
@@ -257,11 +267,11 @@ export function HeroSection() {
         >
           <a
             href="#projects"
-            className="group inline-flex items-center gap-2.5 rounded-full font-medium text-sm text-white bg-gradient-to-r from-apple-blue to-apple-blue-dark shadow-[0_2px_12px_rgba(0,122,255,0.25)] dark:shadow-[0_2px_16px_rgba(0,122,255,0.3)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_6px_24px_rgba(0,122,255,0.35)] dark:hover:shadow-[0_6px_24px_rgba(0,122,255,0.4)]"
+            className="group aero-gloss inline-flex items-center gap-2.5 rounded-full font-medium text-sm text-white bg-gradient-to-r from-accent to-accent-dark shadow-[0_2px_12px_rgba(30,167,232,0.3)] dark:shadow-[0_2px_16px_rgba(30,167,232,0.35)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_6px_24px_rgba(30,167,232,0.4)] dark:hover:shadow-[0_6px_24px_rgba(30,167,232,0.45)]"
             style={{ padding: "clamp(12px, 1.5vw, 16px) clamp(24px, 3vw, 36px)" }}
           >
-            View Portfolio
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <span className="relative z-10">View Portfolio</span>
+            <ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
         </motion.div>
 
@@ -298,7 +308,7 @@ export function HeroSection() {
                 href={link.href}
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 rounded-full font-medium bg-white/60 dark:bg-white/[0.05] border border-black/[0.06] dark:border-white/[0.07] shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] backdrop-blur-md text-text-secondary hover:text-text-primary transition-all duration-[250ms] ease-out hover:-translate-y-[2px] hover:scale-[1.03] hover:border-black/[0.12] dark:hover:border-white/[0.14] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+                className="glass inline-flex items-center gap-2 rounded-full font-medium text-text-secondary hover:text-text-primary transition-all duration-[250ms] ease-out hover:-translate-y-[2px] hover:scale-[1.03]"
                 style={{ fontSize: "clamp(0.75rem, 1vw, 0.9rem)", padding: "clamp(8px, 1vw, 10px) clamp(14px, 1.5vw, 20px)" }}
               >
                 <link.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

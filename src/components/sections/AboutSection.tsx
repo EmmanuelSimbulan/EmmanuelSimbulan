@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import { SectionWrapper } from "./SectionWrapper";
 import { fadeInUp, staggerContainer, fadeIn } from "@/utils/animations";
 
@@ -77,7 +78,7 @@ export function AboutSection() {
           variants={staggerContainer}
         >
           <motion.div
-            className="p-8 rounded-3xl bg-surface-secondary/50 border border-border"
+            className="p-8 rounded-3xl glass"
             variants={fadeInUp}
           >
             <h3 className="text-xl font-semibold mb-6 text-text-primary">
@@ -90,8 +91,8 @@ export function AboutSection() {
                   className="flex items-start gap-3"
                   variants={fadeIn}
                 >
-                  <div className="w-6 h-6 rounded-full bg-apple-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-apple-blue" />
+                  <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent" />
                   </div>
                   <p className="text-sm text-text-secondary leading-relaxed">
                     {belief}
@@ -101,13 +102,16 @@ export function AboutSection() {
             </div>
           </motion.div>
 
-          {/* MBTI Card */}
+          {/* MBTI Card — personality centerpiece */}
           <motion.div
-            className="p-6 rounded-3xl bg-gradient-to-br from-apple-blue/5 to-apple-purple/5 border border-border"
+            className="p-8 rounded-3xl bg-gradient-to-br from-accent/10 via-accent-light/5 to-transparent border border-accent/20 hover:border-accent/35 shadow-lg shadow-accent/5 transition-all duration-300"
             variants={fadeInUp}
+            whileHover={{ y: -2 }}
           >
             <div className="flex items-center gap-3 mb-3">
-              <span className="text-2xl">🧠</span>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center shadow-md shadow-accent/25 flex-shrink-0">
+                <Sparkles className="w-4.5 h-4.5 text-white" />
+              </div>
               <h4 className="text-base font-semibold text-text-primary">
                 MBTI: ESFJ • Enneagram: 3w2
               </h4>

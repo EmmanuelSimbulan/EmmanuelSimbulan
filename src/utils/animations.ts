@@ -1,6 +1,13 @@
 import type { Variants } from "framer-motion";
 
-const appleEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+export const appleEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+export const springSmooth = {
+  type: "spring" as const,
+  stiffness: 180,
+  damping: 24,
+  mass: 0.8,
+};
 
 export const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },

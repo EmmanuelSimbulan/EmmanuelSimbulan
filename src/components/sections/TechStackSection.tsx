@@ -25,8 +25,8 @@ export function TechStackSection() {
             className="group relative"
             variants={staggerItem}
           >
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-secondary/50 border border-border rounded-xl hover:border-apple-blue/30 hover:bg-apple-blue/5 transition-all duration-300 cursor-default">
-              <span className="text-sm font-medium text-text-secondary group-hover:text-apple-blue transition-colors">
+            <div className="flex items-center gap-2 px-4 py-2.5 glass rounded-xl hover:border-accent/40 hover:bg-accent/5 transition-all duration-300 cursor-default">
+              <span className="text-sm font-medium text-text-secondary group-hover:text-accent transition-colors">
                 {tech.name}
               </span>
             </div>
